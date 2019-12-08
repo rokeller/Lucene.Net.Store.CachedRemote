@@ -1,0 +1,18 @@
+image: mcr.microsoft.com/dotnet/core/sdk:3.1
+
+stages:
+  - build
+
+before_script:
+  - ". build/prepare.sh"
+
+build:
+  stage: build
+  only:
+    - branches
+  artifacts:
+    untracked: true
+    expire_in: 1 week
+  script:
+    - "dotnet build -c $FLAVOR -p:AssemblyVersion=$VERSION_ASSEMBLY -p:VersionPrefix=$VERSION_PRODUCT -p:VersionSuffix=$BRANCH_SUFFIX"
+    - "dotnet test -c $FLAVOR --no-build"
