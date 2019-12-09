@@ -14,5 +14,7 @@ build:
     untracked: true
     expire_in: 1 week
   script:
-    - "dotnet build -c $FLAVOR -p:AssemblyVersion=$VERSION_ASSEMBLY -p:VersionPrefix=$VERSION_PRODUCT -p:VersionSuffix=$BRANCH_SUFFIX"
+    - "dotnet build -c $FLAVOR $BUILD_ARGS"
     - "dotnet test -c $FLAVOR --no-build"
+    - "dotnet nuget push **/*.nupkg -s https://api.nuget.org/v3/index.json -k $NUGET_API_KEY"
+    - "dotnet nuget push **/*.snupkg -s https://api.nuget.org/v3/index.json -k $NUGET_API_KEY"
