@@ -5,7 +5,12 @@
     <RootNamespace>Lucene.Net.Store</RootNamespace>
     <AssemblyName>Lucene.Net.Store.CachedRemote</AssemblyName>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <IncludeSymbols>true</IncludeSymbols>	
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <Authors>Roger Keller</Authors>
+    <PackageDescription>Allows to build index Directory objects with a remote master Directory and a local cache Directory.</PackageDescription>
+    <PackageTags>lucene.net;lucene;directory;remote;cache;master;search</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
