@@ -6,10 +6,28 @@ stages:
 before_script:
   - ". build/prepare.sh"
 
+build merge request:
+  stage: build
+  only:
+    refs:
+      - merge_requests
+  artifacts:
+    untracked: true
+    expire_in: 1 week
+  script:
+    - "dotnet build -c $FLAVOR $BUILD_ARGS"
+    - "dotnet test -c $FLAVOR --no-build"
+
 build:
   stage: build
   only:
-    - branches
+    refs:
+      - branches
+    changes:
+      - "src/**/*"
+  except:
+    refs:
+      - merge_requests
   artifacts:
     untracked: true
     expire_in: 1 week
