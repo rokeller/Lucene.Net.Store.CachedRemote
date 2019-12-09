@@ -1,3 +1,5 @@
+[![pipeline status](https://gitlab.com/rokeller/lucene.net.store.cachedremote/badges/master/pipeline.svg)](https://gitlab.com/rokeller/lucene.net.store.cachedremote/commits/master)
+
 # Lucene.Net.Store.CachedRemote
 
 Persists Lucene.Net index files in remote (master) directories and uses a local cache to improve performance.
