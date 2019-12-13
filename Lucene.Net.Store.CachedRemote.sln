@@ -7,6 +7,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{FD0BA4B8-45B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lucene.Net.Store.CachedRemote", "src\Lucene.Net.Store.CachedRemote\Lucene.Net.Store.CachedRemote.csproj", "{2A8BE093-9C2A-413E-9D80-35CB349289F7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lucene.Net.Store.CachedRemote.Tests", "src\Lucene.Net.Store.CachedRemote.Tests\Lucene.Net.Store.CachedRemote.Tests.csproj", "{0ED5BA15-3020-41EE-8B4E-FC88676550EB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,8 +34,21 @@ Global
 		{2A8BE093-9C2A-413E-9D80-35CB349289F7}.Release|x64.Build.0 = Release|Any CPU
 		{2A8BE093-9C2A-413E-9D80-35CB349289F7}.Release|x86.ActiveCfg = Release|Any CPU
 		{2A8BE093-9C2A-413E-9D80-35CB349289F7}.Release|x86.Build.0 = Release|Any CPU
+		{0ED5BA15-3020-41EE-8B4E-FC88676550EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0ED5BA15-3020-41EE-8B4E-FC88676550EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0ED5BA15-3020-41EE-8B4E-FC88676550EB}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0ED5BA15-3020-41EE-8B4E-FC88676550EB}.Debug|x64.Build.0 = Debug|Any CPU
+		{0ED5BA15-3020-41EE-8B4E-FC88676550EB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0ED5BA15-3020-41EE-8B4E-FC88676550EB}.Debug|x86.Build.0 = Debug|Any CPU
+		{0ED5BA15-3020-41EE-8B4E-FC88676550EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0ED5BA15-3020-41EE-8B4E-FC88676550EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0ED5BA15-3020-41EE-8B4E-FC88676550EB}.Release|x64.ActiveCfg = Release|Any CPU
+		{0ED5BA15-3020-41EE-8B4E-FC88676550EB}.Release|x64.Build.0 = Release|Any CPU
+		{0ED5BA15-3020-41EE-8B4E-FC88676550EB}.Release|x86.ActiveCfg = Release|Any CPU
+		{0ED5BA15-3020-41EE-8B4E-FC88676550EB}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{2A8BE093-9C2A-413E-9D80-35CB349289F7} = {FD0BA4B8-45B9-4464-936B-1A9EB841FE10}
+		{0ED5BA15-3020-41EE-8B4E-FC88676550EB} = {FD0BA4B8-45B9-4464-936B-1A9EB841FE10}
 	EndGlobalSection
 EndGlobal

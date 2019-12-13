@@ -37,7 +37,17 @@ namespace Lucene.Net.Store
 
         public override string GetLockID()
         {
-            return remote.GetLockID();
+            switch (options.LockBehavior)
+            {
+                case LockBehavior.LockCache:
+                    return cache.GetLockID();
+
+                case LockBehavior.LockRemote:
+                    return remote.GetLockID();
+
+                default:
+                    throw new NotSupportedException($"Unsupported LockBehavior: {options.LockBehavior}");
+            }
         }
 
         public override IndexOutput CreateOutput(string name, IOContext context)
@@ -53,7 +63,7 @@ namespace Lucene.Net.Store
                         remote.CreateOutput(name, context));
 
                 default:
-                    throw new NotSupportedException();
+                    throw new NotSupportedException($"Unsupported WriteBehavior: {options.WriteBehavior}");
             }
         }
 
