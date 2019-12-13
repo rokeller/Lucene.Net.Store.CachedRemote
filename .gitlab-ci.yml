@@ -2,36 +2,35 @@ image: mcr.microsoft.com/dotnet/core/sdk:3.1
 
 stages:
   - build
+  - publish
 
-before_script:
-  - ". build/prepare.sh"
+workflow:
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: never
+    - when: always
 
-build merge request:
+build and test:
   stage: build
-  only:
-    refs:
-      - merge_requests
   artifacts:
-    untracked: true
-    expire_in: 1 week
+    paths:
+      - TestResults/
+      - Packages/
+  coverage: '/^\|\s+Total\s+\|\s+\d+\.?\d+%\s+\|\s+(\d+\.?\d+)%\s+\|\s+\d+\.?\d+%\s+\|$/'
+  before_script:
+    - ". build/prepare.sh"
   script:
     - "dotnet build -c $FLAVOR $BUILD_ARGS"
-    - "dotnet test -c $FLAVOR --no-build"
+    - "dotnet test  -c $FLAVOR $TEST_ARGS"
+    - "mkdir Packages/ || true"
+    - "cp $(find ./ -name *.*nupkg -print) Packages/"
 
-build:
-  stage: build
-  only:
-    refs:
-      - branches
-    changes:
-      - "src/**/*"
-  except:
-    refs:
-      - merge_requests
-  artifacts:
-    untracked: true
-    expire_in: 1 week
+publish nuget packages:
+  stage: publish
+  rules:
+    - if: '$CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "web"'
+      when: on_success
+    - when: never
   script:
-    - "dotnet build -c $FLAVOR $BUILD_ARGS"
-    - "dotnet test -c $FLAVOR --no-build"
+    - "printenv"
     - "dotnet nuget push **/*.nupkg -s https://api.nuget.org/v3/index.json -k $NUGET_API_KEY"

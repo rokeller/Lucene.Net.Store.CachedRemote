@@ -13,12 +13,17 @@ else
     BRANCH_SUFFIX=$CI_COMMIT_REF_NAME
 fi
 
+VERSION_BRANCH_SUFFIX=$(echo $BRANCH_SUFFIX | sed -r 's|/|-|g')
+
 VERSION_BASE=$VER_MAJORMINOR.$VER_COMMITS_SINCE_TAG
 VERSION_ASSEMBLY=$VER_MAJOR.0.0.0
 VERSION_PRODUCT=$VERSION_BASE.0
 
-BUILD_ARGS="-p:AssemblyVersion=$VERSION_ASSEMBLY -p:VersionPrefix=$VERSION_PRODUCT -p:VersionSuffix=$BRANCH_SUFFIX"
+BUILD_ARGS="-p:AssemblyVersion=$VERSION_ASSEMBLY -p:VersionPrefix=$VERSION_PRODUCT -p:VersionSuffix=$VERSION_BRANCH_SUFFIX"
 BUILD_ARGS="$BUILD_ARGS -p:RepositoryBranch=$BRANCH_SUFFIX -p:RepositoryUrl=$CI_PROJECT_URL -p:PackageProjectUrl=$CI_PROJECT_URL"
+
+TEST_ARGS="--no-build -p:CollectCoverage=true -p:CoverletOutputFormat=\"lcov%2copencover\" -p:CoverletOutput=../../TestResults/"
 
 echo "FLAVOR    : $FLAVOR"
 echo "BUILD_ARGS: $BUILD_ARGS"
+echo "TEST_ARGS : $TEST_ARGS"
