@@ -1,0 +1,58 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "command": "dotnet",
+            "type": "shell",
+            "args": [
+                "build",
+                // Ask dotnet build to generate full paths for file names.
+                "/property:GenerateFullPaths=true",
+                // Do not generate summary otherwise it leads to duplicate errors in Problems panel
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "test",
+            "command": "dotnet",
+            "type": "shell",
+            "args": [
+                "test",
+                "--filter",
+                "Classification!=LongRunning",
+                "-p:CollectCoverage=true",
+                // "/p:CoverletOutputFormat=\"lcovc,opencover\"", // See workaround below.
+                "-p:CoverletOutputFormat=\"lcov%2copencover\"",
+                "-p:CoverletOutput=../../TestResults/"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "test_all",
+            "command": "dotnet",
+            "type": "shell",
+            "args": [
+                "test",
+                "/p:CollectCoverage=true",
+                // "/p:CoverletOutputFormat=\"lcovc,opencover\"", // See workaround below.
+                "/p:CoverletOutputFormat=\"lcov%2copencover\"",
+                "/p:CoverletOutput=../../TestResults/"
+            ],
+            "group": "test"
+        }
+    ]
+}
