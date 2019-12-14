@@ -9,8 +9,8 @@ namespace Lucene.Net.Store
 
         public DuplexIndexOutput(IndexOutput out1, IndexOutput out2)
         {
-            this.out1 = out1 ?? throw new System.ArgumentNullException(nameof(out1));
-            this.out2 = out2 ?? throw new System.ArgumentNullException(nameof(out2));
+            this.out1 = out1 ?? throw new ArgumentNullException(nameof(out1));
+            this.out2 = out2 ?? throw new ArgumentNullException(nameof(out2));
         }
 
         public override long Length

@@ -10,7 +10,7 @@ namespace Lucene.Net.Store
 {
     public class CachedRemoteDirectoryTests : IDisposable
     {
-        private static readonly CachedRemoteOptions GoodOptions = new CachedRemoteOptions()
+        private readonly CachedRemoteOptions GoodOptions = new CachedRemoteOptions()
         {
             WriteBehavior = WriteBehavior.WriteCacheSyncRemote,
             LockBehavior = LockBehavior.LockRemote,
@@ -71,6 +71,18 @@ namespace Lucene.Net.Store
 
             dir = new CachedRemoteDirectory(options, remote, cache);
             Assert.Same(expected, dir.LockFactory);
+        }
+
+        [Theory]
+        [InlineData(LockBehavior.Unknown)]
+        [InlineData((LockBehavior)999)]
+        public void GetLockIDThrowsForUnsupportedLockBehavior(LockBehavior behavior)
+        {
+            dir = new CachedRemoteDirectory(GoodOptions, remote, cache);
+            GoodOptions.LockBehavior = behavior;
+
+            NotSupportedException exception = Assert.Throws<NotSupportedException>(() => dir.GetLockID());
+            Assert.Equal($"Unsupported LockBehavior: {behavior}", exception.Message);
         }
 
         [Fact]
@@ -169,6 +181,18 @@ namespace Lucene.Net.Store
             dir = new CachedRemoteDirectory(GoodOptions, remote, cache);
 
             Assert.Empty(dir.ListAll());
+        }
+
+        [Theory]
+        [InlineData(WriteBehavior.Unknown)]
+        [InlineData((WriteBehavior)123)]
+        public void CreateOutputThrowsForUnsupportedWriteBehavior(WriteBehavior behavior)
+        {
+            dir = new CachedRemoteDirectory(GoodOptions, remote, cache);
+            GoodOptions.WriteBehavior = behavior;
+
+            NotSupportedException exception = Assert.Throws<NotSupportedException>(() => dir.CreateOutput("does-not-matter", IOContext.DEFAULT));
+            Assert.Equal($"Unsupported WriteBehavior: {behavior}", exception.Message);
         }
 
         [Theory]
