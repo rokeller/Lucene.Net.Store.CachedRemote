@@ -130,6 +130,7 @@ namespace Lucene.Net.Store
 
 #pragma warning disable 618
             Assert.False(dir.FileExists("does-not-exist"));
+            Assert.False(dir.FileExists(name));
 #pragma warning restore 618
         }
 
