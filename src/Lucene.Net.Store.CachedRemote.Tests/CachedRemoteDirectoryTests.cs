@@ -1,9 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using Lucene.Net.Documents;
 using Lucene.Net.Index;
 using Lucene.Net.QueryParsers.Classic;
 using Lucene.Net.Search;
+using Moq;
+using Moq.Protected;
 using Xunit;
 
 namespace Lucene.Net.Store
@@ -281,6 +284,119 @@ namespace Lucene.Net.Store
                 Assert.Equal(ids[0], doc.Get("id"));
             }
         }
+
+        [Fact]
+#pragma warning disable 618
+        public void ExistingSegmentsAreNotOverwrittenWithWriteCacheSyncRemote()
+        {
+            string[] ids = { Utils.GenerateRandomString(10), Utils.GenerateRandomString(10), };
+            Mock<Directory> mockRemote = new Mock<Directory>(MockBehavior.Strict);
+
+            mockRemote.SetupGet(d => d.LockFactory).Returns(remote.LockFactory);
+            mockRemote.Setup(d => d.GetLockID()).Returns(remote.GetLockID());
+            mockRemote.Setup(d => d.ListAll()).Returns(() => remote.ListAll());
+            mockRemote.Setup(d => d.Copy(cache, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<IOContext>()))
+                .Callback((Directory target, string src, string dest, IOContext context) => remote.Copy(target, src, dest, context));
+            mockRemote.Setup(d => d.FileExists(It.IsAny<string>())).Returns((string name) => remote.FileExists(name));
+            mockRemote.Setup(d => d.CreateOutput(It.IsAny<string>(), It.IsAny<IOContext>()))
+                .Returns((string name, IOContext context) => remote.CreateOutput(name, context));
+            mockRemote.Setup(d => d.Sync(It.IsAny<ICollection<string>>()))
+                .Callback((ICollection<string> names) => remote.Sync(names));
+            mockRemote.Setup(d => d.DeleteFile(It.IsAny<string>())).Callback((string name) => remote.DeleteFile(name));
+            mockRemote.Protected().Setup("Dispose", true, true);
+
+            CachedRemoteOptions options = new CachedRemoteOptions()
+            {
+                WriteBehavior = WriteBehavior.WriteCacheSyncRemote,
+                LockBehavior = LockBehavior.LockRemote,
+            };
+            dir = new CachedRemoteDirectory(options, mockRemote.Object, cache);
+            IndexWriterConfig writerConfig;
+
+            // Create two segments with a single document each.
+            for (int i = 0; i < ids.Length; i++)
+            {
+                writerConfig = new IndexWriterConfig(Utils.Version, Utils.StandardAnalyzer)
+                {
+                    OpenMode = OpenMode.CREATE_OR_APPEND,
+                };
+
+                using (IndexWriter writer = new IndexWriter(dir, writerConfig))
+                {
+                    writer.AddDocument(new Document()
+                    {
+                        new StringField("id", ids[i], Field.Store.YES),
+                        new TextField("body", $"This is document {i}", Field.Store.NO),
+                    });
+                    writer.Commit();
+                }
+            }
+
+            // Delete the first document.
+            {
+                writerConfig = new IndexWriterConfig(Utils.Version, Utils.StandardAnalyzer)
+                {
+                    OpenMode = OpenMode.CREATE_OR_APPEND,
+                };
+
+                using (IndexWriter writer = new IndexWriter(dir, writerConfig))
+                {
+                    writer.DeleteDocuments(new Term("id", ids[0]));
+                    writer.Commit();
+                }
+            }
+
+            // Merge segments
+            {
+                writerConfig = new IndexWriterConfig(Utils.Version, Utils.StandardAnalyzer)
+                {
+                    OpenMode = OpenMode.CREATE_OR_APPEND,
+                    MergePolicy = new TieredMergePolicy()
+                    {
+                        FloorSegmentMB = 0.1,
+                        ForceMergeDeletesPctAllowed = 0,
+
+                    },
+                };
+
+
+                using (IndexWriter writer = new IndexWriter(dir, writerConfig))
+                {
+                    writer.ForceMerge(1);
+
+                    writer.Commit();
+                }
+            }
+
+            dir.Dispose();
+
+            mockRemote.VerifyGet(d => d.LockFactory, Times.Once());
+            mockRemote.Verify(d => d.GetLockID(), Times.Once());
+            mockRemote.Verify(d => d.ListAll(), Times.AtLeastOnce());
+            mockRemote.Verify(d => d.Copy(cache, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<IOContext>()), Times.AtLeastOnce());
+            mockRemote.Verify(d => d.FileExists(It.IsAny<string>()), Times.AtLeast(4));
+            string[] remoteFiles =
+            {
+                // First segment with single doc.
+                "_0.cfs", "_0.cfe", "_0.si", "segments_1",
+                // Second segment with single doc.
+                "_1.cfs", "_1.cfe", "_1.si", "segments_2",
+                // Delete first doc, and thus first segment.
+                "segments_3",
+                // Merge
+                "_2.fdx", "_2.fdt", "_2_Lucene41_0.doc", "_2_Lucene41_0.pos", "_2_Lucene41_0.tim", "_2_Lucene41_0.tip", "_2.nvd", "_2.nvm", "_2.fnm", "_2.si", "segments_4",
+            };
+            foreach (string file in remoteFiles)
+            {
+                mockRemote.Verify(d => d.CreateOutput(file, It.IsAny<IOContext>()), Times.Once());
+            }
+            mockRemote.Verify(d => d.CreateOutput("segments.gen", It.IsAny<IOContext>()), Times.Exactly(4));
+            mockRemote.Verify(d => d.Sync(It.IsAny<ICollection<string>>()), Times.AtLeast(4));
+            mockRemote.Verify(d => d.DeleteFile(It.IsAny<string>()), Times.AtLeast(3));
+            mockRemote.Protected().Verify("Dispose", Times.Once(), true, true);
+            mockRemote.VerifyNoOtherCalls();
+        }
+#pragma warning restore 618
 
         private static int GenerateRandomFile(Directory dir, string name)
         {

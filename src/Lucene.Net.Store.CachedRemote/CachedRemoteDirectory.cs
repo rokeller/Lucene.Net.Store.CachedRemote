@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -142,7 +143,10 @@ namespace Lucene.Net.Store
                     // Copy the files to sync to the remote.
                     foreach (string name in names)
                     {
-                        cache.Copy(remote, name, name, IOContext.DEFAULT);
+                        if (ShouldCopyToRemoteDuringSync(name))
+                        {
+                            cache.Copy(remote, name, name, IOContext.DEFAULT);
+                        }
                     }
                     break;
 
@@ -152,6 +156,25 @@ namespace Lucene.Net.Store
             }
 
             remote.Sync(names);
+        }
+
+        private bool ShouldCopyToRemoteDuringSync(string name)
+        {
+            Debug.Assert(WriteBehavior.WriteCacheSyncRemote == options.WriteBehavior,
+                "Should check ShouldCopyToRemoteDuringSync only for WriteCacheSyncRemote write behavior.");
+
+            // Writing to the remote is configured to happen only during sync, so we _only_ want to copy the file to the
+            // remote under the following conditions:
+            // 1. The file is the "segments.gen" file which was updated to point to a new "segments_X" file. It is necessary
+            //    to copy the file to the remote to make the most recently committed segments available for reading.
+            // 2. The file does _NOT_ yet exist on the remote. Since segment files ("_X*.*") are never changed once written,
+            //    there's no situation where we want to overwrite _existing_ segment files in the remote directory. So if
+            //    the remote already has the segment file, we don't want to copy it over again, since it couldn't possibly
+            //    have changed.
+            return (StringComparer.Ordinal.Equals(name, IndexFileNames.SEGMENTS_GEN)) ||
+#pragma warning disable 618
+                !remote.FileExists(name);
+#pragma warning restore 618
         }
 
         protected override void Dispose(bool disposing)
