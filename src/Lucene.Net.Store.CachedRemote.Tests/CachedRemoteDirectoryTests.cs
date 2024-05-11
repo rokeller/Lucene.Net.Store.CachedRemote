@@ -68,7 +68,7 @@ namespace Lucene.Net.Store
                     break;
 
                 default:
-                    Assert.True(false, "Unsupported LockBehavior: " + lockBehavior);
+                    Assert.Fail("Unsupported LockBehavior: " + lockBehavior);
                     return;
             }
 
