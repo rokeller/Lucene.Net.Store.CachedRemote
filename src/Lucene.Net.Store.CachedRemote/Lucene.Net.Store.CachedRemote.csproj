@@ -1,20 +1,37 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>$(LibraryTargetFrameworks)</TargetFrameworks>
     <RootNamespace>Lucene.Net.Store</RootNamespace>
     <AssemblyName>Lucene.Net.Store.CachedRemote</AssemblyName>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <IncludeSymbols>true</IncludeSymbols>	
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <Authors>Roger Keller</Authors>
-    <PackageDescription>Allows to build index Directory objects with a remote master Directory and a local cache Directory.</PackageDescription>
-    <PackageTags>lucene.net;lucene;directory;remote;cache;master;search</PackageTags>
+    <LangVersion>10.0</LangVersion>
+    <IsPackable>true</IsPackable>
+    <!-- <GenerateDocumentationFile>true</GenerateDocumentationFile> -->
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Lucene.Net" Version="4.8.0-beta00006" />
+    <PackageReference Include="Lucene.Net" Version="4.8.0-beta*" />
   </ItemGroup>
 
+  <PropertyGroup Label="NuSpec">
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <IncludeSymbols>true</IncludeSymbols>
+    <Authors>Roger Keller</Authors>
+    <PackageDescription>Allows to build index Directory objects with a remote master Directory and a local cache Directory.</PackageDescription>
+    <PackageTags>lucene.net;lucene;directory;remote;cache;master;search</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <DebugType>Embedded</DebugType>
+    <EmbedAllSources>True</EmbedAllSources>
+    <Features>strict</Features>
+    <RepositoryUrl>https://github.com/$(GITHUB_REPOSITORY)</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryBranch>$(GITHUB_REF_NAME)</RepositoryBranch>
+    <RepositoryCommit>$(GITHUB_SHA)</RepositoryCommit>
+    <PackageProjectUrl>$(RepositoryUrl)</PackageProjectUrl>
+  </PropertyGroup>
+
+  <ItemGroup Label="NuSpec">
+    <None Include="$(MSBuildThisFileDirectory)../../docs/README.md" Pack="true" PackagePath="\"/>
+  </ItemGroup>
 </Project>
