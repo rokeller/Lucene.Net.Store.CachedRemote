@@ -6,7 +6,7 @@
     <AssemblyName>Lucene.Net.Store.CachedRemote</AssemblyName>
     <LangVersion>10.0</LangVersion>
     <IsPackable>true</IsPackable>
-    <!-- <GenerateDocumentationFile>true</GenerateDocumentationFile> -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

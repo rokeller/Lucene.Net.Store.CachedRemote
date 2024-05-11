@@ -7,12 +7,32 @@ using Lucene.Net.Index;
 
 namespace Lucene.Net.Store
 {
+    /// <summary>
+    /// Implements a <see cref="Directory"/> that caches a remote directory's
+    /// files.
+    /// </summary>
     public class CachedRemoteDirectory : BaseDirectory
     {
         private readonly CachedRemoteOptions options;
         private readonly Directory remote;
         private readonly Directory cache;
 
+        /// <summary>
+        /// Initializes a new instance of <see cref="CachedRemoteDirectory"/>.
+        /// </summary>
+        /// <param name="options">
+        /// The <see cref="CachedRemoteOptions"/> to use.
+        /// </param>
+        /// <param name="remote">
+        /// The <see cref="Directory"/> that tracks the remote index.
+        /// </param>
+        /// <param name="cache">
+        /// The <see cref="Directory"/> that tracks the local cache.
+        /// </param>
+        /// <exception cref="ArgumentNullException">
+        /// Throw if either one of <paramref name="options"/>,
+        /// <paramref name="remote"/> or <paramref name="cache"/> is <c>null</c>.
+        /// </exception>
         public CachedRemoteDirectory(CachedRemoteOptions options, Directory remote, Directory cache)
         {
             this.options = options ?? throw new ArgumentNullException(nameof(options));
@@ -36,6 +56,7 @@ namespace Lucene.Net.Store
 
         #region Directory Implementation
 
+        /// <inheritdoc/>
         public override string GetLockID()
         {
             switch (options.LockBehavior)
@@ -51,6 +72,7 @@ namespace Lucene.Net.Store
             }
         }
 
+        /// <inheritdoc/>
         public override IndexOutput CreateOutput(string name, IOContext context)
         {
             switch (options.WriteBehavior)
@@ -68,6 +90,7 @@ namespace Lucene.Net.Store
             }
         }
 
+        /// <inheritdoc/>
         public override void DeleteFile(string name)
         {
 #pragma warning disable 618
@@ -90,12 +113,14 @@ namespace Lucene.Net.Store
             }
         }
 
+        /// <inheritdoc/>
         [Obsolete("this method will be removed in 5.0")]
         public override bool FileExists(string name)
         {
             return cache.FileExists(name) || remote.FileExists(name);
         }
 
+        /// <inheritdoc/>
         public override long FileLength(string name)
         {
 #pragma warning disable 618
@@ -110,6 +135,7 @@ namespace Lucene.Net.Store
             }
         }
 
+        /// <inheritdoc/>
         public override string[] ListAll()
         {
             HashSet<string> files = new HashSet<string>(Enumerable.Concat(SafeListAll(cache), SafeListAll(remote)));
@@ -117,6 +143,7 @@ namespace Lucene.Net.Store
             return files.ToArray();
         }
 
+        /// <inheritdoc/>
         public override IndexInput OpenInput(string name, IOContext context)
         {
             // If the input does not exist in the cache, or it's the 'segments.gen' file, copy it from the remote to the cache.
@@ -133,6 +160,7 @@ namespace Lucene.Net.Store
             return cache.OpenInput(name, context);
         }
 
+        /// <inheritdoc/>
         public override void Sync(ICollection<string> names)
         {
             cache.Sync(names);
@@ -177,6 +205,7 @@ namespace Lucene.Net.Store
 #pragma warning restore 618
         }
 
+        /// <inheritdoc/>
         protected override void Dispose(bool disposing)
         {
             if (disposing)
