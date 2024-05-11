@@ -1,5 +1,3 @@
-[![pipeline status](https://gitlab.com/rokeller/lucene.net.store.cachedremote/badges/master/pipeline.svg)](https://gitlab.com/rokeller/lucene.net.store.cachedremote/commits/master)
-
 # Lucene.Net.Store.CachedRemote
 
 Persists Lucene.Net index files in remote (master) directories and uses a local cache to improve performance.
@@ -9,7 +7,7 @@ Persists Lucene.Net index files in remote (master) directories and uses a local 
 Provides a `Lucene.Net.Store.Directory` implementation that automatically manages index files across both a
 remote directory as well as a local (cache) directory. The `Lucene.Net.Store.CachedRemoteDirectory` automatically
 updates index files on write in the remote directory, and keeps the local cache up-to-date for optimal performance.
-Used in combination with remote directories such as [Lucene.Net.Store.AzureBlob](https://gitlab.com/rokeller/lucene.net.store.azureblob)
+Used in combination with remote directories such as [Lucene.Net.Store.AzureBlob](https://github.com/rokeller/Lucene.Net.Store.AzureBlob)
 it can be used to provide very performant and centrally persisted yet distributed search indices.
 
 ## Usage
