@@ -13,6 +13,7 @@ namespace Lucene.Net.Store
             this.out2 = out2 ?? throw new ArgumentNullException(nameof(out2));
         }
 
+        /// <inheritdoc/>
         public override long Length
         {
             get
@@ -26,6 +27,7 @@ namespace Lucene.Net.Store
             }
         }
 
+        /// <inheritdoc/>
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
@@ -37,6 +39,7 @@ namespace Lucene.Net.Store
             }
         }
 
+        /// <inheritdoc/>
         protected override void FlushBuffer(byte[] b, int offset, int len)
         {
             out1.WriteBytes(b, offset, len);
