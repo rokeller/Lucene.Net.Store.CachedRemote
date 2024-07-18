@@ -15,7 +15,6 @@
 
   <PropertyGroup Label="NuSpec">
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <IncludeSymbols>true</IncludeSymbols>
     <Authors>Roger Keller</Authors>
     <PackageDescription>Allows to build index Directory objects with a remote master Directory and a local cache Directory.</PackageDescription>
     <PackageTags>lucene.net;lucene;directory;remote;cache;master;search</PackageTags>
