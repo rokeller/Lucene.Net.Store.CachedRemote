@@ -7,7 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{FD0BA4B8-45B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lucene.Net.Store.CachedRemote", "src\Lucene.Net.Store.CachedRemote\Lucene.Net.Store.CachedRemote.csproj", "{2A8BE093-9C2A-413E-9D80-35CB349289F7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lucene.Net.Store.CachedRemote.Tests", "src\Lucene.Net.Store.CachedRemote.Tests\Lucene.Net.Store.CachedRemote.Tests.csproj", "{0ED5BA15-3020-41EE-8B4E-FC88676550EB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lucene.Net.Store.CachedRemote.Tests", "test\Lucene.Net.Store.CachedRemote.Tests\Lucene.Net.Store.CachedRemote.Tests.csproj", "{0ED5BA15-3020-41EE-8B4E-FC88676550EB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
