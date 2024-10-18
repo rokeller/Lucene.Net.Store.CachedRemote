@@ -22,6 +22,6 @@
     <PackageReference Include="Moq" Version="4.*"/>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Lucene.Net.Store.CachedRemote\Lucene.Net.Store.CachedRemote.csproj"/>
+    <ProjectReference Include="..\..\src\Lucene.Net.Store.CachedRemote\Lucene.Net.Store.CachedRemote.csproj"/>
   </ItemGroup>
 </Project>
