@@ -15,7 +15,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="coverlet.msbuild" Version="6.*"/>
+    <PackageReference Include="coverlet.msbuild" Version="10.*"/>
 
     <PackageReference Include="Lucene.Net.Analysis.Common" Version="4.8.0-beta*"/>
     <PackageReference Include="Lucene.Net.QueryParser" Version="4.8.0-beta*"/>
