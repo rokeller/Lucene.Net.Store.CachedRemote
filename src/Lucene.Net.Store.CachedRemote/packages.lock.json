@@ -5,8 +5,8 @@
       "Lucene.Net": {
         "type": "Direct",
         "requested": "[4.8.0-beta*, )",
-        "resolved": "4.8.0-beta00017",
-        "contentHash": "7LLWS9nNwx01AyE/KXMh+qdAlzDkRANE8407AO/wEmLL1InzVKFwfsRdRmwg4ILOMFui4xZ1Y54eqvzo3Tf9Vw==",
+        "resolved": "4.8.0-beta00018",
+        "contentHash": "iBkkpkDbAHjpZ0dnukFnWnjxSNmsRHOSxrYBBKbtcYJZ8PQRrKsqGGyNm8xmh4ORvsJ1WM7i5A9whiyA8WhNrQ==",
         "dependencies": {
           "J2N": "[2.1.0, 3.0.0)",
           "Microsoft.Extensions.Configuration.Abstractions": "8.0.0",
@@ -88,8 +88,8 @@
       "Lucene.Net": {
         "type": "Direct",
         "requested": "[4.8.0-beta*, )",
-        "resolved": "4.8.0-beta00017",
-        "contentHash": "7LLWS9nNwx01AyE/KXMh+qdAlzDkRANE8407AO/wEmLL1InzVKFwfsRdRmwg4ILOMFui4xZ1Y54eqvzo3Tf9Vw==",
+        "resolved": "4.8.0-beta00018",
+        "contentHash": "iBkkpkDbAHjpZ0dnukFnWnjxSNmsRHOSxrYBBKbtcYJZ8PQRrKsqGGyNm8xmh4ORvsJ1WM7i5A9whiyA8WhNrQ==",
         "dependencies": {
           "J2N": "[2.1.0, 3.0.0)",
           "Microsoft.Extensions.Configuration.Abstractions": "8.0.0"
@@ -118,8 +118,8 @@
       "Lucene.Net": {
         "type": "Direct",
         "requested": "[4.8.0-beta*, )",
-        "resolved": "4.8.0-beta00017",
-        "contentHash": "7LLWS9nNwx01AyE/KXMh+qdAlzDkRANE8407AO/wEmLL1InzVKFwfsRdRmwg4ILOMFui4xZ1Y54eqvzo3Tf9Vw==",
+        "resolved": "4.8.0-beta00018",
+        "contentHash": "iBkkpkDbAHjpZ0dnukFnWnjxSNmsRHOSxrYBBKbtcYJZ8PQRrKsqGGyNm8xmh4ORvsJ1WM7i5A9whiyA8WhNrQ==",
         "dependencies": {
           "J2N": "[2.1.0, 3.0.0)",
           "Microsoft.Extensions.Configuration.Abstractions": "8.0.0"

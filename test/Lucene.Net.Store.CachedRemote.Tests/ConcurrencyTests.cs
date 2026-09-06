@@ -7,7 +7,6 @@ using Lucene.Net.Index;
 using Lucene.Net.QueryParsers.Classic;
 using Lucene.Net.Search;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Lucene.Net.Store
 {
@@ -51,8 +50,8 @@ namespace Lucene.Net.Store
             dir2 = new CachedRemoteDirectory(Options, remote, cache2);
 
             await Task.WhenAll(
-                Task.Run(() => AddDocuments(dir1, keys[0])),
-                Task.Run(() => AddDocuments(dir2, keys[1])));
+                Task.Run(() => AddDocuments(dir1, keys[0]), TestContext.Current.CancellationToken),
+                Task.Run(() => AddDocuments(dir2, keys[1]), TestContext.Current.CancellationToken));
 
             QueryDocuments(dir1, keys);
             QueryDocuments(dir2, keys);
