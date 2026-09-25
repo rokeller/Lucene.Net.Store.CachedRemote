@@ -40,7 +40,9 @@ jobs:
 
       - name: Test
         run: |
-          dotnet test $SLN --no-build --collect:'XPlat Code Coverage' \
+          dotnet test $SLN --no-build \
+            --coverlet \
+            --coverlet-exclude '[Moq]*' \
             --results-directory 'TestResults/Temp'
 
       - name: Install report generator
@@ -49,8 +51,10 @@ jobs:
 
       - name: Generate report
         run: |
-          reportgenerator -reports:"TestResults/Temp/*/coverage.cobertura.xml" \
-            -targetdir:coverage '-reporttypes:Html_Dark;MarkdownSummaryGithub'
+          reportgenerator \
+            -reports:"TestResults/Temp/coverage.cobertura.*.xml" \
+            -targetdir:coverage \
+            -reporttypes:"Html_Dark;MarkdownSummaryGithub"
 
       - name: Add Coverage PR Comment
         uses: marocchino/sticky-pull-request-comment@v3

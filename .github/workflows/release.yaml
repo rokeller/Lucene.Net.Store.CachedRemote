@@ -39,8 +39,10 @@ jobs:
 
       - name: Test
         run: |
-          dotnet test $SLN --no-build --configuration Release \
-            --collect:'XPlat Code Coverage' \
+          dotnet test $SLN --no-build \
+            --configuration Release \
+            --coverlet \
+            --coverlet-exclude '[Moq]*' \
             --results-directory 'TestResults/Temp'
 
       - name: Install report generator
@@ -51,8 +53,10 @@ jobs:
       - name: Generate report
         if: ${{ !cancelled() }}
         run: |
-          reportgenerator -reports:"TestResults/Temp/*/coverage.cobertura.xml" \
-            -targetdir:coverage '-reporttypes:Html_Dark;MarkdownSummaryGithub'
+          reportgenerator \
+            -reports:"TestResults/Temp/coverage.cobertura.*.xml" \
+            -targetdir:coverage \
+            -reporttypes:"Html_Dark;MarkdownSummaryGithub"
 
       - name: Write to Job Summary
         if: ${{ !cancelled() }}
